@@ -1,0 +1,5 @@
+Apply a function to frames of a video
+
+function can be filter, blob detector, etc.
+
+function must take 3d numpy ndarrays as input and return 2d or 3d numpy arrays
