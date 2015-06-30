@@ -91,7 +91,7 @@ class VideoObject:
                     cv2.imshow('original',frame)
 
                 #Track progress
-                print ('\r%.2f %s complete' %\
+                print ('\r%d%s complete' %\
                       (self.cap.get(1) / self.total_frames * 100, '%'), end='') 
 
                 #Need this for playback to work
@@ -99,7 +99,7 @@ class VideoObject:
                     break
 
             else:
-                print('Finished processing video.')
+                print('\nFinished processing video.')
                 self.cap.release()
                 
         if preserve_audio and write_changes:
@@ -113,9 +113,12 @@ class VideoObject:
         #Attach audio to transformed video
         cmds.append('ffmpeg -i %s -i tmp_output.mp3 -map 0 -map 1 -codec copy -shortest tmp_out.avi' % self.out_name)
         for cmd in cmds: os.system(cmd)        
-        #Cleanup
+        #Clean up
         os.remove('tmp_output.mp3')
         os.rename('tmp_out.avi',self.out_name)
+
+
+
 
 def normalize(arr, max_=255.0, dtype=np.uint8, nan_check=False):
     '''By default will normalize array to 0-255 as np.uint8'''
@@ -138,6 +141,9 @@ def to_2d_from_3d(arr): #do checks on input
 def to_3d_from_2d(arr):
     pass
 
+
+
+
 def main():
     video = VideoObject('test.mpg')
     print(video.__dict__)
@@ -150,9 +156,9 @@ def main():
         return normalize(np.fft.fftshift(frame))
     
     video.apply_function_to_vid(transform_function, 
-                                write_changes=True,
-                                preserve_audio=True, 
-                                view_while_processing=False)
+                                write_changes=False,
+                                preserve_audio=False, 
+                                view_while_processing=True)
                                 
     print('Finished')
     # Add helper function to assert input properties == output properties

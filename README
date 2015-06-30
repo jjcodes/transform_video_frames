@@ -1,5 +1,14 @@
-Apply a function to frames of a video
+Apply an arbitrary function to video frames.  
 
-function can be filter, blob detector, etc.
+Function can be filter, blob detector, etc., or a combination of multiple 
+functions.
 
-function must take 3d numpy ndarrays as input and return 2d or 3d numpy arrays
+Function must take 3d numpy ndarrays as input and return 2d or 3d numpy arrays
+
+Sample video 'test.mpg' is taken from open-video.org and is titled 'NASA 25th
+Anniversary Show, Segment 01'  
+
+Code has been updated to support Python 3.4+ and OpenCV 3.0.
+Earlier versions of either may not be supported.
+See first commit for use with python 2 and earlier opencv versions
+
