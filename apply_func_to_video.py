@@ -1,6 +1,7 @@
 from __future__ import print_function
 from __future__ import division
 import os
+import time
 import numpy as np
 import cv2
 
@@ -10,6 +11,7 @@ apply_func_to_video.py
 requires opencv 2.6+ (only tested on 3 so far, with python3.4)
 requires ffmpeg to be in path 
 numpy==1.8.2 used for testing 
+ensure you have write access (or run as admin) if you want to write output.
 
 check main() for example usage
 '''
@@ -107,19 +109,21 @@ class VideoObject:
                 
         if preserve_audio and write_changes:
             print('Processing audio ...')
-            self.process_audio()#FIX WHEN FIXED BELOW, WITH ADDED ARGS
+            self.process_audio()
 
-    def process_audio(self): #change to create tempdir?
-        cmds = []
+    def process_audio(self):
+        ''' to do: fix to allow for different formats '''
+        tmp_mp3_out = 'tmp_' + str(time.time()) + '.mp3'
+        tmp_vid_out = tmp_mp3_out[:-4] + '.avi'
         #Strip audio from original file
         os.system('ffmpeg -i %s -vn -ac 2 -ar 44100 -ab 320k '
-                  '-f mp3 tmp_output.mp3' % self.filename)
+                  '-f mp3 %s' % (self.filename, tmp_mp3_out))
         #Attach audio to transformed video
-        os.system('ffmpeg -i %s -i tmp_output.mp3 -map 0 -map 1 '
-                  '-codec copy -shortest tmp_out.avi' % self.out_name)      
+        os.system('ffmpeg -i %s -i %s -map 0 -map 1 -codec copy '
+                  '-shortest %s' % (tmp_mp3_out, self.out_name, tmp_vid_out))   
         #Clean up
-        os.remove('tmp_output.mp3')
-        os.rename('tmp_out.avi',self.out_name)
+        os.remove(tmp_mp3_out)
+        os.rename(tmp_vid_out, self.out_name)
 
 
 ######################### Helper functions ###################################
