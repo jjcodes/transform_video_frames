@@ -137,7 +137,7 @@ def normalize(arr, max_=255.0, dtype=np.uint8, nan_check=False):
     return arr.astype(dtype) #Dtype needed by opencv
 
 def extract_rgb(arr3d): 
-    '''Extracts r, g, b channels from one 3D array --> three 2D arrays '''
+    '''Extracts r, g, b channels from one 3D array --> three 2D arrays'''
     try:
         arr3d = np.asarray(arr3d)
         if arr3d.ndim < 3:
@@ -148,11 +148,13 @@ def extract_rgb(arr3d):
     r, g, b = arr3d[:,:,0], arr3d[:,:,1], arr3d[:,:,2]
     return r, g, b
     
-def combine_rgb(r, g, b, dtype=np.uint8):
+def combine_rgb(r, g=None, b=None, dtype=np.uint8):
     '''Combines separate color channels of same shape to 3D array
-       To do grayscale, can either return 2D array with transform function
-       (preferred) or you can pass the same channel three times here.
+       To do r,g,b as grayscale, pass the grayscale img as the r channel.
     '''
+    if g is None or b is None:
+        g = r
+        b = r
     try:
         r, g, b = np.asarray(r), np.asarray(g), np.asarray(b)
         if r.shape != b.shape or b.shape != g.shape:
